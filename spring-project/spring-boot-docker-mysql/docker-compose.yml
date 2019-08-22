@@ -1,0 +1,36 @@
+version : '3'
+services:
+  dockerservice:
+#    build:
+#      context: .
+#      dockerfile: Dockerfile
+    image: gejx/spring-boot-docker-mysql
+    container_name: spring-boot-docker-mysql
+    ports:
+      - "8081:8081"
+    networks:
+      - net-spring-db
+    volumes:
+      - /Users/gjason/tmp:/tmp
+    depends_on:
+      - mysqldbserver
+
+  mysqldbserver:
+    build:
+      context: .
+      dockerfile: Dockerfile.mysql
+    ports:
+      - "3306:3306"
+    networks:
+      - net-spring-db
+    restart: always
+    environment:
+      MYSQL_DATABASE: testdb
+      MYSQL_USER: root
+      MYSQL_PASSWORD: 123456
+      MYSQL_ROOT_PASSWORD: 123456
+    container_name: mysqldbserver
+
+networks:
+  net-spring-db:
+    driver: bridge

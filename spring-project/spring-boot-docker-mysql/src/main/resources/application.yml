@@ -1,0 +1,13 @@
+spring:
+  application:
+    name: spring-boot-docker-mysql
+  datasource:
+    url: jdbc:mysql://mysqldbserver:3306/testdb
+    username: root
+    password: 123456
+    driver-class-name: com.mysql.jdbc.Driver
+    dbcp2:
+      test-while-idle: true
+      validation-query: SELECT 1
+server:
+  port: 8081
