@@ -25,7 +25,6 @@ public class URLParaserExample {
         System.out.println(UrlPage("app://CGMyIncomeViewController"));
         System.out.println(UrlPage("https://h5.360fengdai.com/#/creditSuper"));
         System.out.println(UrlPage("https://h5.360fengdai.com/#/creditSuper#user"));
-
     }
 
     public static String UrlPage(String strURL) {
