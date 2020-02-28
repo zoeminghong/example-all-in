@@ -3,6 +3,7 @@ package com.charpter01;
 /**
  * Created on 2019-10-25.
  *
+ * 策略模式
  * @author 迹_Jason
  */
 public abstract class Duck {

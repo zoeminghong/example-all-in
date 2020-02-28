@@ -1,4 +1,4 @@
-package com.charpter04;
+package com.charpter04.chouxiang;
 
 /**
  * Created on 2019-11-03.
@@ -8,6 +8,6 @@ package com.charpter04;
 public class ThickCrusDough implements Dough {
     @Override
     public void doSomething() {
-
+        System.out.println("This is the ThickCrusDough");
     }
 }
