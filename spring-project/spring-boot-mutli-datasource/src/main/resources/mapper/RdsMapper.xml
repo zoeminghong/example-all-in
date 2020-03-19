@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">  
+<mapper namespace="query.dao.RdsDao">
+   
+    <select id="queryRdsValue" resultType="query.entity.Rds">
+  	 	SELECT * FROM xtyy_mbew
+  	 	<where>
+  	 		<if test="werks != null and werks != '' and werks != 'null'">
+  	 			and werks = #{werks}
+  	 		</if>
+  	 	</where>
+  </select>
+	
+</mapper> 

@@ -1,0 +1,35 @@
+spring:
+  application:
+    name: spring-boot-mutli-datasource
+  datasource:
+    dynamic:
+      p6spy: true
+      primary: rds
+      druid:
+        filters: stat
+      datasource:
+        rds:
+          type: com.alibaba.druid.pool.DruidDataSource
+          driver-class-name: com.mysql.jdbc.Driver
+          url: jdbc:mysql://localhost:3306/test
+          username: root
+          password: 123456
+          testSql: SELECT 1
+          initial-size: 10
+          max-size: 50
+          druid:
+            initial-size: 5
+        rds2:
+          type: com.alibaba.druid.pool.DruidDataSource
+          driver-class-name: com.gbase.jdbc.Driver
+          url: jdbc:gbase://jdbc:mysql://localhost:3306/test1
+          username: root
+          password: 123456
+          testSql: SELECT 1
+          initial-size: 10
+          max-size: 50
+          druid:
+            initial-size: 5
+
+server:
+  port: 7786
