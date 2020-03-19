@@ -1,0 +1,27 @@
+spring:
+  application:
+    name: spring-vertx
+  profiles:
+    active: default
+server:
+  port: 7756
+query:
+  services:
+    getAccountMessage:
+      databaseType: MySQL
+      database: test_con
+      poolMaxSize: 5
+      sql: select * from user where 1=1 {where} group by {groupBy}
+  vertx:
+    eventLoopPoolSize: 50
+    workerPoolSize: 200
+    internalBlockingPoolSize: 50
+    maxWorkerExecuteTime: 20000000000
+    warningExceptionTime: 10000000000
+  http:
+    port: 7777
+  mysql:
+    host: localhost
+    port: 6379
+    username: root
+    password: 123456
