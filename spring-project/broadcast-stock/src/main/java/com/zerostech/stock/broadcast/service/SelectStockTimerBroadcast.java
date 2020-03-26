@@ -26,12 +26,15 @@ public class SelectStockTimerBroadcast {
     private final static String[] STOCK = new String[]{"000629","600664","512720","000671"};
     private final static String STOCK_URL = "https://gw.datayes.com/rrp_adventure/web/search/stockInfo?ticker=";
 
+    public static void main(String[] args) {
+        query();
+    }
 //    @Scheduled(cron = "0 0/5 * * * ?")
     @Scheduled(cron = "0 5 10,11,12,14,15 * * ?")
-    public void query() {
+    public static void query() {
 
         Map<String, String> header = new HashMap<>();
-        header.put("cookie", "cloud-sso-token=B617218007C0CC4D57FD2A26125F7425;");
+        header.put("cookie", "cloud-sso-token=048D244E0CB4C4275D800231E5F71186;");
 
         logger.info("开始执行...");
         for (String s : STOCK) {
@@ -47,10 +50,10 @@ public class SelectStockTimerBroadcast {
                 double priceDelta = data.get("priceDelta").asDouble();
                 // 股票名称
                 String shortNM = data.get("shortNM").asText();
-//                System.out.println(lastPrice);
-//                System.out.println(valueDelta);
-//                System.out.println(priceDelta);
-//                System.out.println(shortNM);
+                System.out.println(lastPrice);
+                System.out.println(valueDelta);
+                System.out.println(priceDelta);
+                System.out.println(shortNM);
                 String textMessage = null;
                 try {
                     textMessage = URLEncoder.encode(StringUtils.patternText("当前幅度已经达到{}【{}】，最新报价为{}", valueDelta, priceDelta, lastPrice), "UTF-8");

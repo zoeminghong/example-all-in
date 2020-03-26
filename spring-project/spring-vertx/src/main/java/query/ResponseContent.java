@@ -2,8 +2,8 @@ package query;
 
 import com.ecfront.dew.common.$;
 import com.ecfront.dew.common.Resp;
-import com.huayun.cube.query.config.QueryConfig;
 import io.vertx.core.http.HttpServerResponse;
+import query.config.QueryConfig;
 
 /**
  * Created on 2020-03-16.
