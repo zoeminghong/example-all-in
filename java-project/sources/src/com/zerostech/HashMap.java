@@ -419,6 +419,7 @@ public class HashMap<K,V> extends AbstractMap<K,V>
     /**
      * The next size value at which to resize (capacity * load factor).
      *
+     * 初始化容量长度
      * @serial
      */
     // (The javadoc description is true upon serialization.
@@ -679,6 +680,7 @@ public class HashMap<K,V> extends AbstractMap<K,V>
         // 在新的数组位置上的时候，会执行如下代码
         ++modCount;
         if (++size > threshold)
+            // 扩容是在赋值之后
             resize();
         afterNodeInsertion(evict);
         return null;
@@ -699,25 +701,31 @@ public class HashMap<K,V> extends AbstractMap<K,V>
         int oldThr = threshold;
         int newCap, newThr = 0;
         if (oldCap > 0) {
+            // 如果已经达到 Int 类型最大值 2的32次方，就直接返回
             if (oldCap >= MAXIMUM_CAPACITY) {
                 threshold = Integer.MAX_VALUE;
                 return oldTab;
             }
+            // 扩容是原先的两倍
             else if ((newCap = oldCap << 1) < MAXIMUM_CAPACITY &&
                     oldCap >= DEFAULT_INITIAL_CAPACITY)
                 newThr = oldThr << 1; // double threshold
         }
+        // 初始化的时候，将初始化的值赋予
         else if (oldThr > 0) // initial capacity was placed in threshold
             newCap = oldThr;
+        // 如果没有设置初始化值，就设置默认值：16，扩容值：12
         else {               // zero initial threshold signifies using defaults
             newCap = DEFAULT_INITIAL_CAPACITY;
             newThr = (int)(DEFAULT_LOAD_FACTOR * DEFAULT_INITIAL_CAPACITY);
         }
+        // 初始化的时候，计算扩容值
         if (newThr == 0) {
             float ft = (float)newCap * loadFactor;
             newThr = (newCap < MAXIMUM_CAPACITY && ft < (float)MAXIMUM_CAPACITY ?
                     (int)ft : Integer.MAX_VALUE);
         }
+        // 扩容初始化
         threshold = newThr;
         @SuppressWarnings({"rawtypes","unchecked"})
         Node<K,V>[] newTab = (Node<K,V>[])new Node[newCap];
@@ -728,8 +736,10 @@ public class HashMap<K,V> extends AbstractMap<K,V>
                 if ((e = oldTab[j]) != null) {
                     oldTab[j] = null;
                     if (e.next == null)
+                        // 如果只有数组位置上只有一个值，那就直接 hash 赋值到新位置上
                         newTab[e.hash & (newCap - 1)] = e;
                     else if (e instanceof TreeNode)
+                        // 红黑树操作
                         ((TreeNode<K,V>)e).split(this, newTab, j, oldCap);
                     else { // preserve order
                         Node<K,V> loHead = null, loTail = null;
@@ -737,6 +747,7 @@ public class HashMap<K,V> extends AbstractMap<K,V>
                         Node<K,V> next;
                         do {
                             next = e.next;
+                            // 还在就的位置上，这么算的原因是 cap 值永远是2的n次方，所以决定是往高位还是低位的概率是50%
                             if ((e.hash & oldCap) == 0) {
                                 if (loTail == null)
                                     loHead = e;
@@ -744,6 +755,7 @@ public class HashMap<K,V> extends AbstractMap<K,V>
                                     loTail.next = e;
                                 loTail = e;
                             }
+                            // 到新扩展的位置上
                             else {
                                 if (hiTail == null)
                                     hiHead = e;

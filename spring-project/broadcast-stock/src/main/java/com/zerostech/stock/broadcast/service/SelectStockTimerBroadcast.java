@@ -2,15 +2,21 @@ package com.zerostech.stock.broadcast.service;
 
 import com.ecfront.dew.common.$;
 import com.fasterxml.jackson.databind.JsonNode;
+import com.zerostech.stock.broadcast.CommonConstants;
+import com.zerostech.stock.broadcast.dto.CurrentStockDTO;
+import com.zerostech.stock.broadcast.entity.StockInfo;
 import com.zerostech.stock.broadcast.utils.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -23,46 +29,60 @@ public class SelectStockTimerBroadcast {
 
     private final static Logger logger = LoggerFactory.getLogger(SelectStockTimerBroadcast.class);
 
-    private final static String[] STOCK = new String[]{"000629","600664","512720","000671"};
     private final static String STOCK_URL = "https://gw.datayes.com/rrp_adventure/web/search/stockInfo?ticker=";
 
-    public static void main(String[] args) {
-        query();
-    }
-//    @Scheduled(cron = "0 0/5 * * * ?")
-    @Scheduled(cron = "0 5 10,11,12,14,15 * * ?")
-    public static void query() {
+    @Autowired
+    private RedisTemplate<String, String> redisTemplate;
 
-        Map<String, String> header = new HashMap<>();
-        header.put("cookie", "cloud-sso-token=048D244E0CB4C4275D800231E5F71186;");
+    @Autowired
+    private StockInfoService stockInfoService;
 
-        logger.info("开始执行...");
-        for (String s : STOCK) {
-            JsonNode requestResult = $.json.toJson($.http.get(STOCK_URL + s, header));
-            String status = requestResult.get("message").asText();
-            if ("success".equalsIgnoreCase(status)) {
-                JsonNode data = requestResult.get("data");
-                // 最后价格
-                double lastPrice = data.get("lastPrice").asDouble();
-                // 涨跌幅度
-                double valueDelta = data.get("valueDelta").asDouble();
-                // 涨跌价格
-                double priceDelta = data.get("priceDelta").asDouble();
-                // 股票名称
-                String shortNM = data.get("shortNM").asText();
-                System.out.println(lastPrice);
-                System.out.println(valueDelta);
-                System.out.println(priceDelta);
-                System.out.println(shortNM);
-                String textMessage = null;
-                try {
-                    textMessage = URLEncoder.encode(StringUtils.patternText("当前幅度已经达到{}【{}】，最新报价为{}", valueDelta, priceDelta, lastPrice), "UTF-8");
-                } catch (UnsupportedEncodingException e) {
-                    e.printStackTrace();
+    //    @Scheduled(cron = "0 0/1 * * * ?")
+    @Scheduled(cron = "0 35 9,10,11,12,13,14 * * ?")
+    public void query() {
+        List<StockInfo> stockInfos = stockInfoService.getStockInfo();
+        if (stockInfos != null) {
+            Map<String, String> header = new HashMap<>();
+            if (redisTemplate.hasKey(CommonConstants.RedisKey.TOKEN_KEY)) {
+                header.put("cookie", StringUtils.patternText("cloud-sso-token={};",
+                        redisTemplate.opsForValue().get(CommonConstants.RedisKey.TOKEN_KEY)));
+            } else {
+                logger.error("cloud-sso-token 不存在");
+                $.http.get(StringUtils.patternText("https://api.day.app/GkYbxKAZe3x9L4JJ5YQJcM/{}/{}", "cloud-sso-token 不存在"));
+            }
+            logger.info("开始执行...");
+            for (StockInfo s : stockInfos) {
+                JsonNode requestResult = $.json.toJson($.http.get(STOCK_URL + s.getCode(), header));
+                String status = requestResult.get("message").asText();
+                if ("success".equalsIgnoreCase(status)) {
+                    CurrentStockDTO currentStock = $.json.toObject(requestResult.get("data"), CurrentStockDTO.class);
+                    // 最新价格
+                    double lastPrice = currentStock.getLastPrice();
+                    // 涨跌幅度
+                    double valueDelta = currentStock.getValueDelta();
+                    // 涨跌价格
+                    double priceDelta = currentStock.getPriceDelta();
+                    // 股票名称
+                    String shortNM = currentStock.getShortNM();
+                    logger.debug(lastPrice + "");
+                    logger.debug(valueDelta + "");
+                    logger.debug(priceDelta + "");
+                    logger.debug(shortNM);
+                    String textMessage = null;
+                    try {
+                        textMessage = URLEncoder.encode(StringUtils.patternText("当前幅度已经达到{}【{}】，最新报价为{}", valueDelta, priceDelta * 100 + "%", lastPrice), "UTF-8");
+                    } catch (UnsupportedEncodingException e) {
+                        e.printStackTrace();
+                    }
+                    $.http.get(StringUtils.patternText("https://api.day.app/GkYbxKAZe3x9L4JJ5YQJcM/{}/{}", shortNM, textMessage));
+
+                    if (s.getGoalPrice() != null && currentStock.getLastPrice() > s.getGoalPrice().doubleValue()) {
+                        $.http.get(StringUtils.patternText("https://api.day.app/GkYbxKAZe3x9L4JJ5YQJcM/{}/{}", shortNM + "到达目标值了，可以准备卖了！！"));
+                    }
                 }
-                $.http.get(StringUtils.patternText("https://api.day.app/GkYbxKAZe3x9L4JJ5YQJcM/{}/{}", shortNM, textMessage));
             }
         }
+
 
     }
 }

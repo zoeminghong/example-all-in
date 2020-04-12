@@ -1,6 +1,5 @@
 package query;
 
-import com.huayun.cube.query.config.QueryConfig;
 import io.vertx.core.Vertx;
 import io.vertx.core.VertxOptions;
 import io.vertx.core.http.HttpServerOptions;
@@ -8,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import query.config.QueryConfig;
 
 import javax.annotation.PostConstruct;
 

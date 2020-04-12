@@ -1,6 +1,7 @@
 package query.database;
 
-import com.huayun.cube.query.config.QueryConfig;
+
+import query.config.QueryConfig;
 
 /**
  * Created on 2020-03-17.

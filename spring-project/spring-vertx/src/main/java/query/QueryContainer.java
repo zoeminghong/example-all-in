@@ -1,8 +1,8 @@
 package query;
 
 
-import com.huayun.cube.query.config.QueryConfig;
 import io.vertx.core.Vertx;
+import query.config.QueryConfig;
 
 /**
  * Created on 2020-03-16.

@@ -1,8 +1,8 @@
 package query.database;
 
 
-import com.huayun.cube.query.config.QueryConfig;
-import com.huayun.cube.query.config.ServiceProperties;
+import query.config.QueryConfig;
+import query.config.ServiceProperties;
 
 /**
  * Created on 2020-03-17.

@@ -8,19 +8,19 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * Created on 2020-03-19.
+ * Created on 2020-03-31.
  *
  * @author 迹_Jason
  */
 @RestController
-@RequestMapping("test")
-public class TestController {
+@RequestMapping
+public class QueryController {
 
     @Autowired
     private SelectStockTimerBroadcast selectStockTimerBroadcast;
 
-    @GetMapping
-    public Resp<Void> test() {
+    @GetMapping("push")
+    public Resp<Void> push() {
         selectStockTimerBroadcast.query();
         return Resp.success(null);
     }

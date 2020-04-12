@@ -4,8 +4,6 @@ import com.ecfront.dew.common.$;
 import com.ecfront.dew.common.Resp;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.huayun.cube.query.QueryContainer;
-import com.huayun.cube.query.config.QueryConfig;
 import io.vertx.mysqlclient.MySQLConnectOptions;
 import io.vertx.mysqlclient.MySQLPool;
 import io.vertx.sqlclient.PoolOptions;
@@ -13,6 +11,8 @@ import io.vertx.sqlclient.Row;
 import io.vertx.sqlclient.RowSet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import query.QueryContainer;
+import query.config.QueryConfig;
 
 import java.util.HashMap;
 import java.util.Map;

@@ -2,10 +2,6 @@ package query;
 
 import com.ecfront.dew.common.$;
 import com.ecfront.dew.common.Resp;
-import com.huayun.cube.query.config.ServiceProperties;
-import com.huayun.cube.query.database.DatabaseFactory;
-import com.huayun.cube.query.database.IDatabase;
-import com.huayun.cube.query.dto.WideTableAPIRequest;
 import io.vertx.core.Handler;
 import io.vertx.core.MultiMap;
 import io.vertx.core.http.HttpMethod;
@@ -13,6 +9,10 @@ import io.vertx.core.http.HttpServerRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.StringUtils;
+import query.config.ServiceProperties;
+import query.database.DatabaseFactory;
+import query.database.IDatabase;
+import query.dto.WideTableAPIRequest;
 
 import java.util.HashMap;
 import java.util.Map;

@@ -1,6 +1,7 @@
 package query.config;
 
-import com.huayun.cube.query.common.BaseConstants;
+
+import query.common.BaseConstants;
 
 import java.io.Serializable;
 
