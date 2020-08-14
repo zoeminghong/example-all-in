@@ -1,8 +1,6 @@
 package query.controller;
 
 import com.ecfront.dew.common.Resp;
-import query.entity.Rds;
-import query.service.RdsService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,14 +8,15 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import query.entity.Rds;
+import query.service.RdsService;
 
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping(value = "/rds")
 public class RdsController {
-    private final static Logger logger = LoggerFactory.getLogger(OdpsController.class);
+    private final static Logger logger = LoggerFactory.getLogger(RdsController.class);
     @Autowired
     private RdsService rdsService;
 
@@ -47,12 +46,12 @@ public class RdsController {
     }
 
     @GetMapping(value = "/xtyy/mbew")
-    public Resp<List<Map<String, Object>>> getRdsXtyyMbew(
+    public Resp<List<Rds>> getRdsXtyyMbew(
             @RequestParam(value = "dmdatauptime", required = false) String dmdatauptime) {
         try {
             Rds rds = new Rds();
             rds.setDmdatauptime(dmdatauptime);
-            return Resp.success(rdsService.queryRdsXtyyMbew(rds));
+            return Resp.success(rdsService.queryRdsValue(rds));
         } catch (Exception e) {
             e.printStackTrace();
             logger.error("查询RDS数据失败：{}", e.getMessage());

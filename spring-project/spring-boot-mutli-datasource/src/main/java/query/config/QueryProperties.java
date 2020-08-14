@@ -12,14 +12,14 @@ import org.springframework.stereotype.Component;
 @ConfigurationProperties(prefix = "query")
 public class QueryProperties {
 
-    private ODPSProperties odps = new ODPSProperties();
-
-    public ODPSProperties getOdps() {
-        return odps;
-    }
-
-    public QueryProperties setOdps(ODPSProperties odps) {
-        this.odps = odps;
-        return this;
-    }
+//    private ODPSProperties odps = new ODPSProperties();
+//
+//    public ODPSProperties getOdps() {
+//        return odps;
+//    }
+//
+//    public QueryProperties setOdps(ODPSProperties odps) {
+//        this.odps = odps;
+//        return this;
+//    }
 }

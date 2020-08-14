@@ -3,3 +3,13 @@ server:
 spring:
   application:
     name: broadcast-stock
+  redis:
+    host: 121.37.162.97
+    password: xVxlZQ9ADKqxmyaE
+    database: 0
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    type: com.alibaba.druid.pool.DruidDataSource
+    url: jdbc:mysql://121.37.162.97:3306/stock
+    password: xVxlZQ9ADKqxmyaE
+    username: root
